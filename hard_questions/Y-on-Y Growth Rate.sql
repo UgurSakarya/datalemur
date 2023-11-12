@@ -29,7 +29,7 @@
 --
 --To calculate the year-on-year growth rate, we compare the current year's spend with the previous year's spend.For instance, the spend grew by 24.62% from 2020 to 2021, indicating a positive growth rate.
 
--- SOLUTION
+-- SOLUTION-1 
 with curr_year as (SELECT 
 DATE_TRUNC('YEAR', transaction_date) AS CURR_YEAR,
 product_id,
@@ -55,3 +55,20 @@ CURR.product_id = PREV.product_id AND
 PREV.CURR_YEAR = DATE_TRUNC('YEAR', (CURR.CURR_YEAR - INTERVAL '1 YEAR'))
 ORDER BY PRODUCT_ID, YEAR
 ;
+
+-- SOLUTION-2
+with spend as (
+SELECT 
+EXTRACT(YEAR FROM TRANSACTION_DATE) AS year,
+product_id,
+spend as current_Year_spend,
+lag(spend) over(partition by product_id order by product_id, extract(year from transaction_date)) as prev_year_spend
+from user_transactions
+)
+select 
+year,
+product_id,
+current_year_spend,
+prev_year_spend,
+round(100 * ((current_year_spend / prev_year_spend)-1),2) as yoy_rate
+from spend
