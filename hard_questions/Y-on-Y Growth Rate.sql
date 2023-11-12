@@ -32,7 +32,6 @@
 -- SOLUTION
 with curr_year as (SELECT 
 DATE_TRUNC('YEAR', transaction_date) AS CURR_YEAR,
-DATE_TRUNC('YEAR', (transaction_date - INTERVAL '1 YEAR')) AS PREV_YEAR,
 product_id,
 sum(spend) as year_spend
 FROM user_transactions
