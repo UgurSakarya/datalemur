@@ -37,7 +37,6 @@ sum(spend) as year_spend
 FROM user_transactions
 GROUP BY
 DATE_TRUNC('YEAR', transaction_date),
-DATE_TRUNC('YEAR', (transaction_date - INTERVAL '1 YEAR')),
 product_id
 )
 SELECT 
